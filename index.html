@@ -380,7 +380,7 @@
         <input id="api-key" type="password" class="api-key-input"
                placeholder="gsk_xxxxxxxxxxxxxxxx" autocomplete="off">
       </div>
-      <button class="settings-btn" id="settings-btn" title="Toggle API Key" onclick="toggleApiKey()">⚙️</button>
+      <button class="settings-btn" id="settings-btn" title="Toggle API Key" aria-label="Toggle API key visibility" onclick="toggleApiKey()">⚙️</button>
     </div>
   </header>
 
@@ -460,6 +460,13 @@
     /* ── State ── */
     let generatedCode = '';
 
+    /* ── API Key persistence ── */
+    const apiKeyInput = document.getElementById('api-key');
+    apiKeyInput.value = localStorage.getItem('free44_api_key') || '';
+    apiKeyInput.addEventListener('input', () => {
+      localStorage.setItem('free44_api_key', apiKeyInput.value.trim());
+    });
+
     /* ── Toggle API Key visibility ── */
     function toggleApiKey() {
       const group = document.getElementById('api-key-group');
@@ -468,13 +475,6 @@
         apiKeyInput.focus();
       }
     }
-
-    /* ── API Key persistence ── */
-    const apiKeyInput = document.getElementById('api-key');
-    apiKeyInput.value = localStorage.getItem('free44_api_key') || '';
-    apiKeyInput.addEventListener('input', () => {
-      localStorage.setItem('free44_api_key', apiKeyInput.value.trim());
-    });
 
     /* ── Generate ── */
     async function generate() {
