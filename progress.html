@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free44 – Progress Tracker</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a24;
+      --surface2: #23233a;
+      --border: #2d2d4a;
+      --text: #e4e4ef;
+      --text-dim: #9595b0;
+      --accent: #6c5ce7;
+      --accent-hover: #8577ed;
+      --accent-glow: rgba(108, 92, 231, .35);
+      --green: #00cec9;
+      --green-glow: rgba(0, 206, 201, .15);
+      --red: #ff6b6b;
+      --radius: 14px;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+
+    /* ── Container ── */
+    .container {
+      width: 100%;
+      max-width: 960px;
+      padding: 40px 24px 60px;
+    }
+
+    /* ── Title ── */
+    .page-title {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .page-title h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .page-title h1 .emoji { margin-right: 8px; }
+    .page-title p {
+      color: var(--text-dim);
+      font-size: .95rem;
+    }
+
+    /* ── Progress Bar ── */
+    .progress-section {
+      margin-bottom: 40px;
+    }
+    .progress-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .progress-label {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+    .progress-pct {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--green);
+    }
+    .progress-bar-track {
+      width: 100%;
+      height: 14px;
+      border-radius: 99px;
+      background: var(--surface2);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 50%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      transition: width 1s cubic-bezier(.4, 0, .2, 1);
+      box-shadow: 0 0 16px var(--accent-glow), 0 0 32px var(--green-glow);
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: .8rem;
+      color: var(--text-dim);
+    }
+
+    /* ── Columns ── */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .column {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .column-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+    .column-header .badge {
+      margin-left: auto;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    /* Completed column */
+    .column.completed .column-header {
+      background: linear-gradient(135deg, rgba(0, 206, 201, .08), transparent);
+    }
+    .column.completed .badge {
+      background: rgba(0, 206, 201, .15);
+      color: var(--green);
+      border: 1px solid rgba(0, 206, 201, .3);
+    }
+
+    /* Todo column */
+    .column.todo .column-header {
+      background: linear-gradient(135deg, rgba(108, 92, 231, .08), transparent);
+    }
+    .column.todo .badge {
+      background: rgba(108, 92, 231, .15);
+      color: var(--accent-hover);
+      border: 1px solid rgba(108, 92, 231, .3);
+    }
+
+    /* ── Task Items ── */
+    .task-list {
+      list-style: none;
+      padding: 8px 0;
+    }
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 22px;
+      transition: background .15s;
+    }
+    .task-item:hover {
+      background: rgba(255, 255, 255, .02);
+    }
+    .task-item + .task-item {
+      border-top: 1px solid rgba(45, 45, 74, .5);
+    }
+
+    /* Checkbox visuals */
+    .checkbox {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      font-size: .8rem;
+    }
+    .checkbox.checked {
+      background: var(--green);
+      color: #0f0f13;
+      box-shadow: 0 0 10px var(--green-glow);
+    }
+    .checkbox.unchecked {
+      border: 2px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .task-text {
+      font-size: .92rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .column.completed .task-text {
+      color: var(--text-dim);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      width: 100%;
+      text-align: center;
+      padding: 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      font-size: .8rem;
+      color: var(--text-dim);
+      margin-top: auto;
+    }
+    .footer strong { color: var(--accent); font-weight: 700; }
+
+    /* ── Responsive ── */
+    @media (max-width: 680px) {
+      .columns {
+        grid-template-columns: 1fr;
+      }
+      .page-title h1 {
+        font-size: 1.4rem;
+      }
+      .progress-pct {
+        font-size: 1.3rem;
+      }
+      .container {
+        padding: 28px 16px 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Free<span>44</span></div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+
+    <!-- Page Title -->
+    <div class="page-title">
+      <h1><span class="emoji">📋</span>Project Progress Tracker</h1>
+      <p>Tracking milestones for the Free44 project</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Overall Progress</span>
+        <span class="progress-pct">50%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-meta">
+        <span>6 of 12 tasks completed</span>
+        <span>6 remaining</span>
+      </div>
+    </div>
+
+    <!-- Two Columns -->
+    <div class="columns">
+
+      <!-- Completed Column -->
+      <div class="column completed">
+        <div class="column-header">
+          ✅ Already Completed
+          <span class="badge">6 done</span>
+        </div>
+        <ul class="task-list">
+          <li class="task-item">
+            <div class="checkbox checked">✓</div>
+            <span class="task-text">Created Free44 concept</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox checked">✓</div>
+            <span class="task-text">Built working single-page app</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox checked">✓</div>
+            <span class="task-text">Successfully integrated Groq API</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox checked">✓</div>
+            <span class="task-text">Created clean modern dark UI with Tailwind</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox checked">✓</div>
+            <span class="task-text">Added quick-start template buttons</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox checked">✓</div>
+            <span class="task-text">Real AI responses are working properly</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- To Do Column -->
+      <div class="column todo">
+        <div class="column-header">
+          ⬜ Still To Do
+          <span class="badge">6 left</span>
+        </div>
+        <ul class="task-list">
+          <li class="task-item">
+            <div class="checkbox unchecked"></div>
+            <span class="task-text">Deploy the app to Vercel</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox unchecked"></div>
+            <span class="task-text">Add one-click "Download as ZIP" feature</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox unchecked"></div>
+            <span class="task-text">Save previous generations in history</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox unchecked"></div>
+            <span class="task-text">Make the app fully responsive on mobile</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox unchecked"></div>
+            <span class="task-text">Write a strong description for the competition</span>
+          </li>
+          <li class="task-item">
+            <div class="checkbox unchecked"></div>
+            <span class="task-text">Submit the project before deadline</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <strong>Free44</strong> &mdash; AI Code Generator &bull; Progress Tracker
+  </div>
+
+  <script>
+    /* Animate progress bar on load */
+    window.addEventListener('DOMContentLoaded', () => {
+      const fill = document.getElementById('progress-fill');
+      fill.style.width = '0%';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          fill.style.width = '50%';
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
