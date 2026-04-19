@@ -1,423 +1,122 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free44 – AI Code Generator</title>
-  <style>
-    /* ── Reset & Base ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta name="description" content="100% free AI code generator. No credits, no limits. Generate complete web apps with a single prompt.">
+  <meta name="theme-color" content="#6c5ce7">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
 
-    :root {
-      --bg: #0f0f13;
-      --surface: #1a1a24;
-      --surface2: #23233a;
-      --border: #2d2d4a;
-      --text: #e4e4ef;
-      --text-dim: #9595b0;
-      --accent: #6c5ce7;
-      --accent-hover: #8577ed;
-      --accent-glow: rgba(108, 92, 231, .35);
-      --green: #00cec9;
-      --red: #ff6b6b;
-      --radius: 12px;
-      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      --mono: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
-    }
+  <!-- Stylesheets (modular) -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/panels.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/editor.css">
+  <link rel="stylesheet" href="/css/history.css">
+  <link rel="stylesheet" href="/css/responsive.css">
 
-    html { font-size: 16px; }
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── Header ── */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 28px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-    .logo span { color: var(--accent); }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .settings-btn {
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface2);
-      color: var(--text-dim);
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all .2s;
-      line-height: 1;
-    }
-    .settings-btn:hover { border-color: var(--accent); color: var(--text); }
-    .api-key-group {
-      display: none;
-      align-items: center;
-      gap: 8px;
-    }
-    .api-key-group.visible {
-      display: flex;
-    }
-    .api-key-group label {
-      font-size: .8rem;
-      color: var(--text-dim);
-    }
-    .api-key-input {
-      width: 260px;
-      padding: 7px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-size: .85rem;
-      font-family: var(--mono);
-      outline: none;
-      transition: border-color .2s;
-    }
-    .api-key-input:focus { border-color: var(--accent); }
-
-    /* ── Main Layout ── */
-    main {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    /* ── Left Panel (Input) ── */
-    .input-panel {
-      width: 420px;
-      min-width: 340px;
-      display: flex;
-      flex-direction: column;
-      border-right: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .panel-header {
-      padding: 16px 20px 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text-dim);
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* Templates */
-    .templates {
-      padding: 14px 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-    .template-btn {
-      padding: 6px 14px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: var(--surface2);
-      color: var(--text);
-      font-size: .8rem;
-      cursor: pointer;
-      transition: all .2s;
-      white-space: nowrap;
-    }
-    .template-btn:hover {
-      border-color: var(--accent);
-      background: var(--accent-glow);
-      color: #fff;
-    }
-    .template-btn .icon { margin-right: 4px; }
-
-    /* Prompt Area */
-    .prompt-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 16px 20px;
-      gap: 12px;
-      overflow-y: auto;
-    }
-    #prompt {
-      flex: 1;
-      min-height: 140px;
-      padding: 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: .95rem;
-      line-height: 1.6;
-      resize: none;
-      outline: none;
-      transition: border-color .2s;
-    }
-    #prompt:focus { border-color: var(--accent); }
-    #prompt::placeholder { color: var(--text-dim); }
-
-    .generate-btn {
-      padding: 14px;
-      border: none;
-      border-radius: var(--radius);
-      background: var(--accent);
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s, box-shadow .2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .generate-btn:hover { background: var(--accent-hover); box-shadow: 0 0 20px var(--accent-glow); }
-    .generate-btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    /* ── Right Panel (Output) ── */
-    .output-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      overflow: hidden;
-    }
-
-    .output-tabs {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      padding: 0 20px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .tab-btn {
-      padding: 12px 20px;
-      border: none;
-      background: none;
-      color: var(--text-dim);
-      font-size: .85rem;
-      font-weight: 600;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all .2s;
-    }
-    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-    .tab-btn:hover { color: var(--text); }
-    .tab-actions {
-      margin-left: auto;
-      display: flex;
-      gap: 8px;
-    }
-    .icon-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--surface2);
-      color: var(--text-dim);
-      font-size: .78rem;
-      cursor: pointer;
-      transition: all .2s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .icon-btn:hover { border-color: var(--accent); color: var(--text); }
-
-    .output-content {
-      flex: 1;
-      overflow: auto;
-      position: relative;
-    }
-
-    /* Code View */
-    #code-view {
-      display: block;
-      height: 100%;
-      padding: 20px;
-      overflow: auto;
-    }
-    #code-view pre {
-      margin: 0;
-      padding: 20px;
-      border-radius: var(--radius);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      overflow-x: auto;
-      font-family: var(--mono);
-      font-size: .85rem;
-      line-height: 1.65;
-      color: var(--text);
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
-    /* Preview View */
-    #preview-view {
-      display: none;
-      height: 100%;
-    }
-    #preview-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: #fff;
-    }
-
-    /* Welcome / empty state */
-    .welcome {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      text-align: center;
-      padding: 40px;
-      gap: 12px;
-    }
-    .welcome .big-icon { font-size: 4rem; opacity: .3; }
-    .welcome h2 { font-size: 1.3rem; color: var(--text-dim); font-weight: 600; }
-    .welcome p { color: var(--text-dim); font-size: .9rem; max-width: 380px; line-height: 1.5; }
-
-    /* Status bar */
-    .status-bar {
-      padding: 8px 20px;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      font-size: .75rem;
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .status-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-    }
-    .status-dot.error { background: var(--red); }
-
-    /* Spinner */
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .6s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      padding: 12px 20px;
-      border-radius: 10px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: .85rem;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all .3s;
-      z-index: 999;
-      pointer-events: none;
-    }
-    .toast.show { opacity: 1; transform: translateY(0); }
-
-    /* Syntax highlight tokens */
-    .tok-kw   { color: #c792ea; }
-    .tok-str  { color: #c3e88d; }
-    .tok-num  { color: #f78c6c; }
-    .tok-cm   { color: #546e7a; font-style: italic; }
-    .tok-tag  { color: #f07178; }
-    .tok-attr { color: #ffcb6b; }
-    .tok-fn   { color: #82aaff; }
-    .tok-op   { color: #89ddff; }
-    .tok-pn   { color: #e4e4ef; }
-
-    /* Responsive */
-    @media (max-width: 860px) {
-      main { flex-direction: column; }
-      .input-panel {
-        width: 100%;
-        min-width: 0;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        max-height: 50vh;
-      }
-      .api-key-input { width: 180px; }
-      .header-right { gap: 6px; }
-    }
-  </style>
+  <!-- JSZip for ZIP export -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
+          integrity="sha384-JkTfZHq1uVEfQZMyCGyskFkv6QJiJbS2bOROE5BCTmtr4ZUiGGtEe4GFmmIYt8lS"
+          crossorigin="anonymous" defer></script>
 </head>
 <body>
 
+  <!-- History Sidebar -->
+  <div class="history-overlay" id="history-overlay"></div>
+  <aside class="history-sidebar" id="history-sidebar" aria-label="Generation history">
+    <div class="history-header">
+      <h3>📂 History</h3>
+      <button class="btn-icon" id="history-close" aria-label="Close history">✕</button>
+    </div>
+    <div class="history-search">
+      <input type="text" class="input" id="history-search" placeholder="Search history…" autocomplete="off">
+    </div>
+    <div class="history-list" id="history-list"></div>
+    <div class="history-footer">
+      <button class="btn-ghost btn-sm btn-danger" id="history-clear">🗑 Clear All</button>
+    </div>
+  </aside>
+
   <!-- Header -->
   <header>
-    <div class="logo">Free<span>44</span></div>
+    <div class="logo">Free<span>44</span> <span class="logo-badge">FREE</span></div>
+    <nav class="header-nav">
+      <a href="/" class="nav-link active">Generator</a>
+      <a href="/progress.html" class="nav-link">Progress</a>
+    </nav>
     <div class="header-right">
       <div class="api-key-group" id="api-key-group">
-        <label for="api-key">Groq API Key</label>
+        <label for="api-key">API Key</label>
         <input id="api-key" type="password" class="api-key-input"
-               placeholder="gsk_xxxxxxxxxxxxxxxx" autocomplete="off">
+               placeholder="gsk_…" autocomplete="off">
       </div>
-      <button class="settings-btn" id="settings-btn" title="Toggle API Key" aria-label="Toggle API key visibility" onclick="toggleApiKey()">⚙️</button>
+      <select id="model-select" class="select" aria-label="AI Model"></select>
+      <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">☀️</button>
+      <button class="btn-icon" id="settings-btn" aria-label="API Settings">⚙️</button>
     </div>
   </header>
 
   <!-- Main -->
-  <main>
+  <main class="app-main">
     <!-- Input Panel -->
     <section class="input-panel">
-      <div class="panel-header">⚡ Quick-Start Templates</div>
-      <div class="templates" id="templates"></div>
+      <div class="input-panel-header">
+        <span>⚡ Quick Templates</span>
+        <button class="btn-ghost btn-sm" id="btn-history">📂 History</button>
+      </div>
+      <div class="templates-section">
+        <div class="templates-grid" id="templates"></div>
+      </div>
       <div class="prompt-area">
-        <textarea id="prompt" placeholder="Describe what you want to build…&#10;&#10;e.g. &quot;A responsive landing page for a SaaS product with a hero section, pricing cards, and a newsletter signup form.&quot;"></textarea>
-        <button class="generate-btn" id="generate-btn" onclick="generate()">
+        <textarea id="prompt" class="prompt-textarea" placeholder="Describe what you want to build…&#10;&#10;e.g. &quot;A responsive landing page with hero section, pricing cards, and newsletter signup.&quot;"></textarea>
+        <button class="generate-btn" id="generate-btn">
           🚀 Generate Code
         </button>
+        <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-muted)">
+          <span><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</span>
+          <span>100% Free • No limits</span>
+        </div>
       </div>
     </section>
 
     <!-- Output Panel -->
     <section class="output-panel">
-      <div class="output-tabs">
-        <button class="tab-btn active" data-tab="code" onclick="switchTab('code')">{ } Code</button>
-        <button class="tab-btn" data-tab="preview" onclick="switchTab('preview')">👁 Preview</button>
-        <div class="tab-actions">
-          <button class="icon-btn" onclick="copyCode()">📋 Copy</button>
-          <button class="icon-btn" onclick="downloadCode()">⬇ Download</button>
+      <div class="output-header">
+        <div class="output-tabs">
+          <button class="output-tab active" data-tab="code">{ } Code</button>
+          <button class="output-tab" data-tab="preview">👁 Preview</button>
+        </div>
+        <div class="output-actions">
+          <button class="btn-icon" id="btn-copy" title="Copy code">📋</button>
+          <button class="btn-icon" id="btn-download" title="Download HTML">⬇️</button>
+          <button class="btn-icon" id="btn-zip" title="Download ZIP">📦</button>
+          <button class="btn-icon" id="btn-share" title="Share via URL">🔗</button>
+          <button class="btn-icon" id="btn-fullscreen" title="Fullscreen">⛶</button>
         </div>
       </div>
       <div class="output-content">
         <div id="code-view">
-          <div class="welcome">
-            <div class="big-icon">✨</div>
-            <h2>Ready to generate</h2>
-            <p>Enter a prompt on the left, or pick a quick-start template, then click <strong>Generate Code</strong>.</p>
+          <div class="empty-state">
+            <div class="empty-state-icon">✨</div>
+            <div class="empty-state-title">Ready to create something amazing</div>
+            <p class="empty-state-text">Enter a prompt or pick a template, then click <strong>Generate Code</strong>. It's 100% free with no limits.</p>
+            <div class="empty-state-hints">
+              <span class="empty-state-hint">🆓 No credits needed</span>
+              <span class="empty-state-hint">♾️ Unlimited generations</span>
+              <span class="empty-state-hint">📥 Export to ZIP</span>
+              <span class="empty-state-hint">📱 Works on mobile</span>
+            </div>
           </div>
         </div>
         <div id="preview-view">
-          <iframe id="preview-frame" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+          <iframe id="preview-frame" class="preview-frame" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
         </div>
       </div>
     </section>
@@ -425,202 +124,34 @@
 
   <!-- Status Bar -->
   <div class="status-bar">
-    <div class="status-dot" id="status-dot"></div>
-    <span id="status-text">Ready</span>
+    <div class="status-bar-left">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Ready</span>
+    </div>
+    <span>Free44 • 100% Free • No limits</span>
   </div>
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <!-- JavaScript (modular, order matters) -->
+  <script src="/js/app.js" defer></script>
+  <script src="/js/templates.js" defer></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/editor.js" defer></script>
+  <script src="/js/history.js" defer></script>
+  <script src="/js/export.js" defer></script>
+  <script src="/js/theme.js" defer></script>
+  <script src="/js/shortcuts.js" defer></script>
+  <script src="/js/ui.js" defer></script>
+
+  <!-- Register service worker -->
   <script>
-    /* ── Templates ── */
-    const TEMPLATES = [
-      { icon: '🏠', label: 'Landing Page',   prompt: 'Create a modern, responsive SaaS landing page with a hero section, feature cards, pricing table with 3 tiers, testimonials, and a footer. Use a professional blue/white color scheme.' },
-      { icon: '✅', label: 'Todo App',        prompt: 'Build a fully functional todo app with add, edit, delete, and mark-complete features. Include categories, priority levels, local storage persistence, and a clean minimal UI.' },
-      { icon: '🧮', label: 'Calculator',      prompt: 'Create a scientific calculator with a sleek dark UI. Support basic arithmetic, parentheses, percentage, and memory functions. Add keyboard support and a history panel.' },
-      { icon: '🎨', label: 'Portfolio',        prompt: 'Build a creative developer portfolio page with an animated hero section, project showcase grid with hover effects, skills section with progress bars, and a contact form.' },
-      { icon: '📊', label: 'Dashboard',        prompt: 'Create an analytics dashboard with sidebar navigation, stat cards at the top, a line chart and bar chart (use inline SVG or canvas), a recent activity table, and a dark professional theme.' },
-      { icon: '🛒', label: 'E-Commerce',       prompt: 'Build a product listing page for an e-commerce store with a search bar, filter sidebar, product cards with images/prices/ratings, a shopping cart drawer, and responsive grid layout.' },
-      { icon: '💬', label: 'Chat UI',          prompt: 'Create a modern chat interface with a sidebar showing conversations, a main chat area with message bubbles, a text input with emoji button, and online status indicators.' },
-      { icon: '🎮', label: 'Snake Game',       prompt: 'Build a classic Snake game using HTML canvas. Include score tracking, high score with localStorage, speed increase on eating food, game-over screen, and restart button.' },
-    ];
-
-    const templatesEl = document.getElementById('templates');
-    TEMPLATES.forEach(t => {
-      const btn = document.createElement('button');
-      btn.className = 'template-btn';
-      btn.innerHTML = `<span class="icon">${t.icon}</span>${t.label}`;
-      btn.onclick = () => {
-        document.getElementById('prompt').value = t.prompt;
-        document.getElementById('prompt').focus();
-      };
-      templatesEl.appendChild(btn);
-    });
-
-    /* ── State ── */
-    let generatedCode = '';
-
-    /* ── API Key persistence ── */
-    const apiKeyInput = document.getElementById('api-key');
-    apiKeyInput.value = localStorage.getItem('free44_api_key') || '';
-    apiKeyInput.addEventListener('input', () => {
-      localStorage.setItem('free44_api_key', apiKeyInput.value.trim());
-    });
-
-    /* ── Toggle API Key visibility ── */
-    function toggleApiKey() {
-      const group = document.getElementById('api-key-group');
-      group.classList.toggle('visible');
-      if (group.classList.contains('visible')) {
-        apiKeyInput.focus();
-      }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () {});
+      });
     }
-
-    /* ── Generate ── */
-    async function generate() {
-      const apiKey = apiKeyInput.value.trim();
-      if (!apiKey) { toast('Please enter your Groq API key.'); apiKeyInput.focus(); return; }
-
-      const prompt = document.getElementById('prompt').value.trim();
-      if (!prompt) { toast('Please enter a prompt.'); return; }
-
-      const btn = document.getElementById('generate-btn');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner"></div> Generating…';
-      setStatus('generating', 'Generating code…');
-
-      const systemPrompt = `You are Free44, an expert front-end developer. Generate a complete, single-file HTML page for the user's request. Rules:
-- Output ONLY the raw HTML code (starting with <!DOCTYPE html>). No markdown, no explanation, no code fences.
-- Include all CSS in a <style> tag and all JS in a <script> tag inside the HTML file.
-- Use modern, clean, responsive design. Make it visually polished.
-- The page must be fully self-contained and work when opened directly in a browser.
-- Use professional color schemes and smooth transitions/animations where appropriate.`;
-
-      try {
-        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
-          },
-          body: JSON.stringify({
-            model: 'llama-3.1-70b-versatile',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user',   content: prompt }
-            ],
-            temperature: 0.6,
-            max_tokens: 8000
-          })
-        });
-
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error?.message || `API error ${res.status} ${res.statusText}`);
-        }
-
-        const data = await res.json();
-        generatedCode = (data.choices?.[0]?.message?.content || '').trim();
-
-        /* Strip markdown fences if the model wraps them */
-        generatedCode = generatedCode.replace(/^```[a-z]*\s*/i, '').replace(/```\s*$/i, '').trim();
-
-        showCode(generatedCode);
-        updatePreview(generatedCode);
-        setStatus('ready', `Done — ${data.usage?.total_tokens || '?'} tokens used`);
-        toast('Code generated successfully!');
-
-      } catch (e) {
-        setStatus('error', e.message);
-        toast('Error: ' + e.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = '🚀 Generate Code';
-      }
-    }
-
-    /* ── Syntax Highlighting (lightweight) ── */
-    function highlight(code) {
-      /* Escape HTML first */
-      let s = code
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-
-      /* Comments */
-      s = s.replace(/(\/\/.*)/g,                       '<span class="tok-cm">$1</span>');
-      s = s.replace(/(\/\*[\s\S]*?\*\/)/g,             '<span class="tok-cm">$1</span>');
-      s = s.replace(/(&lt;!--[\s\S]*?--&gt;)/g,        '<span class="tok-cm">$1</span>');
-
-      /* Strings */
-      s = s.replace(/(["'`])(?:(?=(\\?))\2.)*?\1/g,    '<span class="tok-str">$&</span>');
-
-      /* HTML tags */
-      s = s.replace(/(&lt;\/?)([\w-]+)/g,              '$1<span class="tok-tag">$2</span>');
-      s = s.replace(/([\w-]+)(=)/g,                    '<span class="tok-attr">$1</span>$2');
-
-      /* JS keywords */
-      const kw = 'const|let|var|function|return|if|else|for|while|class|import|export|from|default|async|await|new|this|try|catch|throw|switch|case|break|continue|typeof|instanceof';
-      s = s.replace(new RegExp(`\\b(${kw})\\b`, 'g'),  '<span class="tok-kw">$1</span>');
-
-      /* Numbers */
-      s = s.replace(/\b(\d+\.?\d*)\b/g,                '<span class="tok-num">$1</span>');
-
-      return s;
-    }
-
-    function showCode(code) {
-      const view = document.getElementById('code-view');
-      view.innerHTML = `<pre>${highlight(code)}</pre>`;
-    }
-
-    function updatePreview(code) {
-      const frame = document.getElementById('preview-frame');
-      frame.srcdoc = code;
-    }
-
-    /* ── Tabs ── */
-    function switchTab(tab) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      document.getElementById('code-view').style.display    = tab === 'code' ? 'block' : 'none';
-      document.getElementById('preview-view').style.display  = tab === 'preview' ? 'block' : 'none';
-    }
-
-    /* ── Actions ── */
-    function copyCode() {
-      if (!generatedCode) { toast('Nothing to copy yet.'); return; }
-      navigator.clipboard.writeText(generatedCode).then(() => toast('Copied to clipboard!')).catch(err => toast('Copy failed: ' + err.message));
-    }
-
-    function downloadCode() {
-      if (!generatedCode) { toast('Nothing to download yet.'); return; }
-      const blob = new Blob([generatedCode], { type: 'text/html' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'free44-generated.html';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      toast('Download started!');
-    }
-
-    /* ── Helpers ── */
-    function setStatus(state, text) {
-      const dot = document.getElementById('status-dot');
-      dot.className = 'status-dot' + (state === 'error' ? ' error' : '');
-      document.getElementById('status-text').textContent = text;
-    }
-
-    function toast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
-    }
-
-    /* Ctrl+Enter to generate */
-    document.getElementById('prompt').addEventListener('keydown', e => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') generate();
-    });
   </script>
 </body>
 </html>

@@ -1,0 +1,200 @@
+/* ══════════════════════════════════════
+   Free44 – Responsive Breakpoints
+   ══════════════════════════════════════ */
+
+/* ── Tablet (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .input-panel {
+    width: 360px;
+    min-width: 280px;
+  }
+
+  .api-key-input {
+    width: 180px;
+  }
+}
+
+/* ── Mobile Landscape / Small Tablet (≤ 860px) ── */
+@media (max-width: 860px) {
+  .app-main {
+    flex-direction: column;
+  }
+
+  .input-panel {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 45vh;
+  }
+
+  .api-key-input {
+    width: 160px;
+  }
+
+  .header-right {
+    gap: 4px;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .output-actions {
+    gap: 3px;
+  }
+
+  .btn-icon {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+  }
+
+  .templates-section {
+    padding: 8px 14px;
+  }
+}
+
+/* ── Mobile (≤ 600px) ── */
+@media (max-width: 600px) {
+  header {
+    padding: 10px 14px;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .logo-badge {
+    display: none;
+  }
+
+  .api-key-input {
+    width: 130px;
+    font-size: 0.75rem;
+  }
+
+  .api-key-group label {
+    display: none;
+  }
+
+  .input-panel {
+    max-height: 40vh;
+  }
+
+  .prompt-area {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .prompt-textarea {
+    min-height: 80px;
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .generate-btn {
+    padding: 11px;
+    font-size: 0.88rem;
+  }
+
+  .templates-section {
+    padding: 8px 12px;
+  }
+
+  .template-pill {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+
+  .output-tab {
+    padding: 10px 12px;
+    font-size: 0.78rem;
+  }
+
+  #code-view {
+    padding: 12px;
+  }
+
+  .code-editor {
+    font-size: 0.75rem;
+  }
+
+  .line-numbers {
+    padding: 12px 8px 12px 10px;
+    font-size: 0.7rem;
+  }
+
+  .code-content {
+    padding: 12px;
+  }
+
+  .empty-state {
+    padding: 24px 16px;
+  }
+
+  .empty-state-icon {
+    font-size: 2.5rem;
+  }
+
+  .empty-state-title {
+    font-size: 1rem;
+  }
+
+  .empty-state-hints {
+    gap: 4px;
+  }
+
+  .empty-state-hint {
+    font-size: 0.68rem;
+    padding: 3px 10px;
+  }
+
+  .status-bar {
+    padding: 5px 12px;
+    font-size: 0.68rem;
+  }
+
+  .toast {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    font-size: 0.8rem;
+  }
+
+  .history-sidebar {
+    width: 280px;
+  }
+
+  .modal {
+    min-width: 0;
+    margin: 16px;
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* ── Very Small (≤ 400px) ── */
+@media (max-width: 400px) {
+  .input-panel-header {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  .output-header {
+    padding: 0 10px;
+  }
+
+  .output-tab {
+    padding: 8px 10px;
+    font-size: 0.73rem;
+  }
+
+  .template-pill {
+    font-size: 0.68rem;
+    padding: 3px 8px;
+  }
+
+  .btn-icon {
+    padding: 4px 6px;
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,165 @@
+/* ══════════════════════════════════════
+   Free44 – Components
+   ══════════════════════════════════════ */
+
+/* ── Spinner ── */
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+
+/* ── Toast ── */
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.85rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all var(--transition-slow);
+  z-index: 999;
+  pointer-events: none;
+  max-width: 360px;
+  box-shadow: var(--shadow-lg);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.toast.toast-success {
+  border-left: 3px solid var(--green);
+}
+
+.toast.toast-error {
+  border-left: 3px solid var(--red);
+}
+
+.toast.toast-info {
+  border-left: 3px solid var(--accent);
+}
+
+/* ── Modal ── */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-slow);
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  min-width: 380px;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.2s ease;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+}
+
+.modal-close:hover {
+  color: var(--text);
+  background: var(--surface2);
+}
+
+.modal-body {
+  padding: 18px 22px;
+}
+
+/* ── Ghost / Outline Buttons ── */
+
+.btn-ghost {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-ghost:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+  background: var(--surface2);
+}
+
+.btn-ghost.btn-sm {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+}
+
+.btn-ghost.btn-danger:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-soft);
+}
+
+/* ── Keyboard Key ── */
+
+kbd {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 0.73rem;
+  font-family: var(--mono);
+  color: var(--text-dim);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  box-shadow: 0 1px 0 var(--border);
+}
