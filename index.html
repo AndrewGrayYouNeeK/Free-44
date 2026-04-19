@@ -393,7 +393,7 @@
           </div>
         </div>
         <div id="preview-view">
-          <iframe id="preview-frame" sandbox="allow-scripts allow-modals"></iframe>
+          <iframe id="preview-frame" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
         </div>
       </div>
     </section>
@@ -483,14 +483,14 @@
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.error?.message || `API error ${res.status}`);
+          throw new Error(err.error?.message || `API error ${res.status} ${res.statusText}`);
         }
 
         const data = await res.json();
         generatedCode = (data.choices?.[0]?.message?.content || '').trim();
 
         /* Strip markdown fences if the model wraps them */
-        generatedCode = generatedCode.replace(/^```html?\s*/i, '').replace(/```\s*$/i, '').trim();
+        generatedCode = generatedCode.replace(/^```[a-z]*\s*/i, '').replace(/```\s*$/i, '').trim();
 
         showCode(generatedCode);
         updatePreview(generatedCode);
@@ -556,7 +556,7 @@
     /* ── Actions ── */
     function copyCode() {
       if (!generatedCode) { toast('Nothing to copy yet.'); return; }
-      navigator.clipboard.writeText(generatedCode).then(() => toast('Copied to clipboard!')).catch(() => toast('Copy failed.'));
+      navigator.clipboard.writeText(generatedCode).then(() => toast('Copied to clipboard!')).catch(err => toast('Copy failed: ' + err.message));
     }
 
     function downloadCode() {
