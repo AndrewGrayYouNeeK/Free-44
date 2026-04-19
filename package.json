@@ -1,10 +1,11 @@
 {
   "name": "free-44",
-  "version": "1.0.0",
-  "description": "Free44 – AI Code Generator",
+  "version": "2.0.0",
+  "description": "Free44 – 100% Free AI Code Generator. No credits, no limits.",
   "private": true,
   "scripts": {
     "start": "npx serve .",
     "build": "echo 'Static site — no build step required'"
-  }
+  },
+  "keywords": ["ai", "code-generator", "free", "pwa", "groq"]
 }

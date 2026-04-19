@@ -1,0 +1,318 @@
+/* ══════════════════════════════════════
+   Free44 – Panel Layout
+   ══════════════════════════════════════ */
+
+.app-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Input Panel ── */
+
+.input-panel {
+  width: 420px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  transition: background var(--transition-slow);
+}
+
+.input-panel-header {
+  padding: 14px 20px 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── Templates Section ── */
+
+.templates-section {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.templates-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.template-pill {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.template-pill:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: #fff;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.pill-icon {
+  font-size: 0.85rem;
+}
+
+/* ── Prompt Area ── */
+
+.prompt-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.prompt-textarea {
+  flex: 1;
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  resize: none;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.prompt-textarea:focus {
+  border-color: var(--accent);
+}
+
+.prompt-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+/* ── Generate Button ── */
+
+.generate-btn {
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.generate-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.generate-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* ── Output Panel ── */
+
+.output-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+  transition: background var(--transition-slow);
+}
+
+.output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.output-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.output-tab {
+  padding: 12px 18px;
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition);
+}
+
+.output-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.output-tab:hover {
+  color: var(--text);
+}
+
+.output-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.output-content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+}
+
+/* ── Code View ── */
+
+#code-view {
+  display: block;
+  height: 100%;
+  padding: 20px;
+  overflow: auto;
+}
+
+/* ── Preview View ── */
+
+#preview-view {
+  display: none;
+  height: 100%;
+}
+
+.preview-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* ── Empty State ── */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 40px 24px;
+  gap: 14px;
+  animation: fadeIn 0.5s ease;
+}
+
+.empty-state-icon {
+  font-size: 3.5rem;
+  opacity: 0.3;
+}
+
+.empty-state-title {
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.empty-state-text {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  max-width: 400px;
+  line-height: 1.55;
+}
+
+.empty-state-hints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.empty-state-hint {
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  cursor: default;
+}
+
+/* ── Fullscreen Mode ── */
+
+.output-panel.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+}
+
+/* ── Status Bar ── */
+
+.status-bar {
+  padding: 7px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background var(--transition-slow);
+}
+
+.status-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.status-dot.error {
+  background: var(--red);
+}
+
+.status-dot.loading {
+  background: var(--yellow);
+  animation: pulse 1s ease-in-out infinite;
+}
