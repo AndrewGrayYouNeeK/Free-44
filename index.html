@@ -50,10 +50,30 @@
       letter-spacing: -0.5px;
     }
     .logo span { color: var(--accent); }
-    .api-key-group {
+    .header-right {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+    .settings-btn {
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface2);
+      color: var(--text-dim);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+      line-height: 1;
+    }
+    .settings-btn:hover { border-color: var(--accent); color: var(--text); }
+    .api-key-group {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .api-key-group.visible {
+      display: flex;
     }
     .api-key-group label {
       font-size: .8rem;
@@ -345,6 +365,7 @@
         max-height: 50vh;
       }
       .api-key-input { width: 180px; }
+      .header-right { gap: 6px; }
     }
   </style>
 </head>
@@ -353,10 +374,13 @@
   <!-- Header -->
   <header>
     <div class="logo">Free<span>44</span></div>
-    <div class="api-key-group">
-      <label for="api-key">Groq API Key</label>
-      <input id="api-key" type="password" class="api-key-input"
-             placeholder="gsk_xxxxxxxxxxxxxxxx" autocomplete="off">
+    <div class="header-right">
+      <div class="api-key-group" id="api-key-group">
+        <label for="api-key">Groq API Key</label>
+        <input id="api-key" type="password" class="api-key-input"
+               placeholder="gsk_xxxxxxxxxxxxxxxx" autocomplete="off">
+      </div>
+      <button class="settings-btn" id="settings-btn" title="Toggle API Key" onclick="toggleApiKey()">⚙️</button>
     </div>
   </header>
 
@@ -435,6 +459,15 @@
 
     /* ── State ── */
     let generatedCode = '';
+
+    /* ── Toggle API Key visibility ── */
+    function toggleApiKey() {
+      const group = document.getElementById('api-key-group');
+      group.classList.toggle('visible');
+      if (group.classList.contains('visible')) {
+        apiKeyInput.focus();
+      }
+    }
 
     /* ── API Key persistence ── */
     const apiKeyInput = document.getElementById('api-key');
