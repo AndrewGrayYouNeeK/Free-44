@@ -1,0 +1,10 @@
+{
+  "name": "free-44",
+  "version": "1.0.0",
+  "description": "Free44 – AI Code Generator",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "build": "echo 'Static site — no build step required'"
+  }
+}
