@@ -75,7 +75,7 @@ window.Free44 = window.Free44 || {};
           '<div class="history-item-title">' + escapeText(makeTitle(item.prompt)) + '</div>' +
           '<div class="history-item-meta">' +
             '<span class="history-item-tag">' + timeAgo(item.ts) + '</span>' +
-            '<span class="history-item-tag">' + (item.model || 'AI') + '</span>' +
+            '<span class="history-item-tag">' + escapeText(item.model || 'AI') + '</span>' +
           '</div>' +
           '<button class="history-item-delete" data-idx="' + i + '" title="Delete">\u2715</button>' +
         '</div>';

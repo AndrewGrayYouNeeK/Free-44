@@ -14,9 +14,13 @@ window.Free44 = window.Free44 || {};
     { keys: 'Ctrl+H',      desc: 'Toggle history',    action: function () { if (Free44.history) Free44.history.toggle(); } },
     { keys: 'Ctrl+K',      desc: 'Focus prompt',      action: function () { var p = document.getElementById('prompt'); if (p) p.focus(); } },
     { keys: 'Escape',      desc: 'Close panels',      action: function () {
-      if (Free44.history) Free44.history.toggle();
+      /* close the topmost element only */
       var modal = document.querySelector('.modal-overlay.open');
-      if (modal) modal.classList.remove('open');
+      if (modal) { modal.classList.remove('open'); return; }
+      var sidebar = document.getElementById('history-sidebar');
+      if (sidebar && sidebar.classList.contains('open')) {
+        if (Free44.history) Free44.history.toggle();
+      }
     }}
   ];
 

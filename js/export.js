@@ -80,7 +80,12 @@ window.Free44 = window.Free44 || {};
       }
 
       try {
-        var encoded = btoa(unescape(encodeURIComponent(code)));
+        var bytes = new TextEncoder().encode(code);
+        var binary = '';
+        for (var i = 0; i < bytes.length; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        var encoded = btoa(binary);
         var url = window.location.origin + window.location.pathname + '#code=' + encoded;
 
         if (url.length > 8000) {
@@ -107,7 +112,12 @@ window.Free44 = window.Free44 || {};
     if (hash.indexOf('#code=') === 0) {
       try {
         var encoded = hash.substring(6);
-        var code = decodeURIComponent(escape(atob(encoded)));
+        var binary = atob(encoded);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        var code = new TextDecoder().decode(bytes);
         Free44.state.generatedCode = code;
 
         document.addEventListener('DOMContentLoaded', function () {
